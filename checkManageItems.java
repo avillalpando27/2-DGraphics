@@ -14,6 +14,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+import javax.swing.text.Document;
+
 import json.JSONArray;
 import json.JSONObject;
 
@@ -41,7 +43,7 @@ public class checkManageItems {
 		    String filename= "MyFile.txt";
 		    FileWriter fw = new FileWriter(filename,true); //the true will append the new data
 		    fw.write(System.lineSeparator());
-		    fw.write(item.name+","+item.url+","+item.initialPrice+","+item.currentPrice+","+item.change+","+item.date);
+		    fw.write(item.nameManage+","+item.urlManage+","+item.initialPriceManage+","+item.currentPriceManage+","+item.changeManage+","+item.dateManage);
 		    fw.close();
 		}
 		catch(IOException ioe)
@@ -189,7 +191,7 @@ public class checkManageItems {
         FileWriter fwFinal;
 	    fwFinal = new FileWriter(new File("myFile.txt"));
         for(int i = 0; i < counter; i++) {
-        	fwFinal.write(items[i].name+","+items[i].url+","+items[i].initialPrice+","+items[i].currentPrice+","+items[i].change+","+items[i].date+",");
+        	fwFinal.write(items[i].nameManage+","+items[i].urlManage+","+items[i].initialPriceManage+","+items[i].currentPriceManage+","+items[i].changeManage+","+items[i].dateManage+",");
         	if (i != counter - 1) {
         		fwFinal.write(System.lineSeparator());
         	}
@@ -221,7 +223,7 @@ public class checkManageItems {
         FileWriter fwFinal;
 	    fwFinal = new FileWriter(new File("myFile.txt"));
         for(int i = 0; i < counter; i++) {
-        	fwFinal.write(items[i].name+","+items[i].url+","+items[i].initialPrice+","+items[i].currentPrice+","+items[i].change+","+items[i].date);
+        	fwFinal.write(items[i].nameManage+","+items[i].urlManage+","+items[i].initialPriceManage+","+items[i].currentPriceManage+","+items[i].changeManage+","+items[i].dateManage);
         	if (i != counter - 1) {
         		fwFinal.write(System.lineSeparator());
         	}
@@ -246,7 +248,7 @@ public class checkManageItems {
 	        counter++;
         }
         for(int i = 0; i < counter ; i++) {
-        	System.out.println(items[i].name+","+items[i].url+","+items[i].initialPrice+","+items[i].currentPrice+","+items[i].change+","+items[i].date);
+        	System.out.println(items[i].nameManage+","+items[i].urlManage+","+items[i].initialPriceManage+","+items[i].currentPriceManage+","+items[i].changeManage+","+items[i].dateManage);
         }
         
 		return items;
@@ -266,6 +268,8 @@ public class checkManageItems {
 			
 		    obj.append("item", list);
 		}
+		String house = "house";
+		obj.append("house",house);
 
 	    try(FileWriter fileJ = new FileWriter("jsonFile.json"))
 	    {
@@ -276,7 +280,6 @@ public class checkManageItems {
 	    {
 	    	e.printStackTrace();
 	    }
-	    System.out.println(obj);
     }
 	
 	public static void main(String[] args) throws IOException {
@@ -384,7 +387,16 @@ public class checkManageItems {
 	    }
 	    
 	    creatingJ("myFile.txt");
-	    
+	    /*
+	    String url = "http://www.bestbuy.ca/en-CA/product/samsung-samsung-galaxy-tab-3-8-0-16gb-android-4-2-tablet-with-exynos-4212-processor-white-sm-t310/10254746.aspx?path=8654a6d491c7d5a9465456671fa126e4en02";
+	    Document document = Jsoup.connect(url).get();
+
+	    String amount = document.select(".amount").first().text();
+	    System.out.println("Price: " + amount);
+
+	    String name = document.select(".product-title").first().text();
+	    System.out.println("Item Name: " + name);
+	    */
 	}
 }
 
