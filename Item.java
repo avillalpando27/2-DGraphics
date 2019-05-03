@@ -19,59 +19,169 @@ import java.util.Date;
 import pricewatcher.PriceFinder;
 
 public class Item {
-	public String name;
-	public String url;
-	public String initialPrice;
-	public float initPrice;
-	public String currentPrice;
-	public float currPrice;
-	public String change;
-	public String date;
+	public String nameManage;
+	public String urlManage;
+	public String initialPriceManage;
+	public float initPriceManage;
+	public String currentPriceManage;
+	public float currPriceManage;
+	public String changeManage;
+	public String dateManage;
+	
+	protected  String itemName;
+    protected  String itemURL;
+    protected  float itemInitialPrice;
+    protected  float itemCurrentPrice;
+    //private static URL testURL = new URL("https://amzn.to/2HlSGMH");
+
+
+    /**
+     * Default constructor for the Item class
+     */
+	
+    /**
+     * Detail setting constructor. Sets the item details manually.
+     *
+     * @param name  Name of the item being added to Price Watcher
+     * @param uRL   URL of the item being added to Price Watcher
+     * @param price Price of the item being added to Price Watcher
+     */
+    public Item(String name, String uRL, float price) {
+        itemName = name;
+        itemURL = uRL;
+        itemInitialPrice = price;
+    }
+
+    /**
+     * Returns the date the item was added to the Price Watcher app.
+     *
+     * @return Date The item's date.
+     */
+    public String returnDate() {
+
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
+        return formatter.format(date);
+    }
+
+    /**
+     * Updates the item price manually.
+     *
+     * @param price The price being set for the item.
+     */
+    public void setPrice(float price) {
+        itemCurrentPrice = price;
+    }
+
+    /**
+     * Returns the items name
+     *
+     * @return String The item's name.
+     */
+    public String getName() {
+        return itemName;
+    }
+
+    /**
+     * Returns the item's URL
+     *
+     * @return String The item's URL.
+     */
+    public String getURL() {
+        return itemURL;
+    }
+
+    /**
+     * Returns the item's initial price.
+     *
+     * @return float The item's initial price.
+     */
+    public float getInitialPrice() {
+        return itemInitialPrice;
+    }
+
+    /**
+     * Returns the item's current price
+     *
+     * @return float The item's new price
+     */
+    public float getCurrentPrice() {
+        PriceFinder randomPrice = new PriceFinder();
+        itemCurrentPrice = randomPrice.returnNewPrice();
+        return itemCurrentPrice;
+    }
+
+    /**
+     * Calculates the change percentage
+     *
+     * @return float The calculated percentage change of item price
+     */
+    public float getChange() {
+
+        float priceChange;
+
+        priceChange = ((itemInitialPrice - itemCurrentPrice) / itemInitialPrice) * 100;
+
+        return priceChange * -1;
+
+    }
+
+    /**
+     * To string builder for item details
+     *
+     * @return String The item's detail string/block.
+     */
+    public String itemToString() {
+        String details = "Name:\t" + getName() + "\n" + "URL:\t" + getURL() + "\n" + "Initial Price:\t" + getInitialPrice() + "\n" + "Current Price:\t" + getCurrentPrice() + "\n" + "Date Added:\t" + "04/20/2019";
+        return details;
+    }
+	
 	public Item() {
-		this.name = "Toshiba 43LF621U19 43-inch 4K Ultra HD Smart LED TV HDR - Fire TV Edition";
-		this.url = "https://www.amazon.com/Toshiba-43LF621U19-43-inch-Ultra-Smart/dp/B07D4F2P26/ref=sr_1_2_sspa?s=tv&ie=UTF8&qid=1549072299&sr=1-2-spons&keywords=television&psc=1";
-		this.initialPrice = "200";
-		this.initPrice = 200;
-		this.currentPrice = "200";
-		this.currPrice = 200;
-		this.change = "0";
+		this.nameManage = "Toshiba 43LF621U19 43-inch 4K Ultra HD Smart LED TV HDR - Fire TV Edition";
+		this.urlManage = "https://www.amazon.com/Toshiba-43LF621U19-43-inch-Ultra-Smart/dp/B07D4F2P26/ref=sr_1_2_sspa?s=tv&ie=UTF8&qid=1549072299&sr=1-2-spons&keywords=television&psc=1";
+		this.initialPriceManage = "200";
+		this.initPriceManage = 200;
+		this.currentPriceManage = "200";
+		this.currPriceManage = 200;
+		this.changeManage = "0";
 		Date date = new Date();
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");	 
-	    this.date = dateFormat.format(date);
+	    this.dateManage = dateFormat.format(date);
 	}
 	public Item(String name, String url) {
-		this.name =  name;
-		this.url = url;
-		this.initialPrice = "200";
-		this.initPrice = 200;
-		this.currentPrice = "200";
-		this.currPrice = 200;
-		this.change = "0";
+		this.nameManage =  name;
+		this.urlManage = url;
+		this.initialPriceManage = "200";
+		this.initPriceManage = 200;
+		this.currentPriceManage = "200";
+		this.currPriceManage = 200;
+		this.changeManage = "0";
 		Date date = new Date();
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");	 
-	    this.date = dateFormat.format(date);
+	    this.dateManage = dateFormat.format(date);
 	}
 	public Item(String name, String url, String initialPrice, float initPrice, String currentPrice, float currPrice, String change) {
-		this.name = name;
-		this.url = url;
-		this.initialPrice = initialPrice;
-		this.initPrice = initPrice;
-		this.currentPrice = currentPrice;
-		this.currPrice = currPrice;
-		this.change = change;
+		this.nameManage = name;
+		this.urlManage = url;
+		this.initialPriceManage = initialPrice;
+		this.initPriceManage = initPrice;
+		this.currentPriceManage = currentPrice;
+		this.currPriceManage = currPrice;
+		this.changeManage = change;
 		Date date = new Date();
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");	 
-	    this.date = dateFormat.format(date);
+	    this.dateManage = dateFormat.format(date);
 	}
 	public Item(String name, String url, String initialPrice, float initPrice, String currentPrice, float currPrice, String change, String date) {
-		this.name = name;
-		this.url = url;
-		this.initialPrice = initialPrice;
-		this.initPrice = initPrice;
-		this.currentPrice = currentPrice;
-		this.currPrice = currPrice;
-		this.change = change;
-	    this.date = date;
+		this.nameManage = name;
+		this.urlManage = url;
+		this.initialPriceManage = initialPrice;
+		this.initPriceManage = initPrice;
+		this.currentPriceManage = currentPrice;
+		this.currPriceManage = currPrice;
+		this.changeManage = change;
+	    this.dateManage = date;
 	}
 	
 	
@@ -79,12 +189,12 @@ public class Item {
 		float initialValue = 200;
 		float currentValue = (float) find.PriceFinder("simulated");
 		float difference = ((currentValue/initialValue) * 100)-100;
-		this.initialPrice = "200";
-		this.currPrice = currentValue;
+		this.initialPriceManage = "200";
+		this.currPriceManage = currentValue;
 		String currPrice = Float.toString(currentValue);
-		this.currentPrice = currPrice;
+		this.currentPriceManage = currPrice;
 		String diff = Float.toString(difference);
-		this.change = diff;
+		this.changeManage = diff;
 	}
 	public void setName(String name) {
 		
