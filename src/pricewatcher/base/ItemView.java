@@ -92,7 +92,7 @@ public class ItemView extends JPanel {
             g.setColor(Color.RED.brighter().brighter().brighter());
             g.drawString("Change:  % " + df.format(testItem.getChange()), 20, 100);
 
-            playSound(); // method call to play audio clip
+            //playSound(); // method call to play audio clip
            // np.play(np.getCodeBase(), "pricewatcher/base/sound/DeepPercussion.wav"); // previous attempt at audio
             g.setColor(Color.BLACK);
         }else{

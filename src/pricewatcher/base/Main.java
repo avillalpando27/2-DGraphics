@@ -30,13 +30,26 @@ import java.awt.event.*;
 @SuppressWarnings("serial")
 public class Main extends JFrame {
 
-    public  Item[] userItems = new Item[2];
-    public JOptionPane userInput = new JOptionPane();
+    private  Item[] userItems = new Item[100];
+
+    private Item[] fileToList;// sets temporary limit to 100 items
+
+
+    private int currentCounter = 0;
+    private JOptionPane userInput = new JOptionPane();
+    private PriceFinder refreshedPrice = new PriceFinder();
+
+    private checkManageItems  manager = new checkManageItems();
 
 
     private  DefaultListModel<Item> itemList = new DefaultListModel<>();
-    private  JList<Item> jItemList = new JList<>(itemList);
+   // private DefaultListModel<Item> fileItemsList = new DefaultListModel<>();
+
+    //private final JList<Item> jFileItemsList = new JList<>(fileItemsList);
+    private final  JList<Item> jItemList = new JList<>(itemList);
+
     private ItemViewRenderer itemRenderer = new ItemViewRenderer();
+
 
     /**final file path for the images. */
     final private static String FILE_PATH = "/Users/angelvillalpando/Desktop/2-DGraphics/src/pricewatcher/base/image/";
@@ -58,17 +71,10 @@ public class Main extends JFrame {
 
     /** Create a new dialog of the given screen dimension. */
     public Main(Dimension dim) {
+
         super("Price Watcher");
+
         setSize(dim);
-
-
-        userItems[0] = new Item("11-inch iPad Pro", "https://www.apple.com/shop/buy-ipad/ipad-pro", 799.00f);
-        userItems[1] = new Item("iPhone XS", "https://www.apple.com/shop/buy-iphone/iphone-xs", 699.00f);
-
-        itemList.addElement(userItems[0]);
-        itemList.addElement(userItems[1]);
-
-        jItemList.setCellRenderer(itemRenderer);
 
         configureUI();
         setLocationRelativeTo(null);
@@ -76,6 +82,7 @@ public class Main extends JFrame {
         setVisible(true);
         setResizable(true);
         showMessage("Welcome to Price Watcher!");
+
     }
 
     /** Callback to be invoked when the refresh button is clicked.
@@ -83,11 +90,23 @@ public class Main extends JFrame {
      * along with a percentage price change. */
     private void refreshButtonClicked(ActionEvent event) {
 
-        PriceFinder refreshedPrice = new PriceFinder(); // generates a new price to set as a temp item's new price
 
-        userItems[0].setPrice(refreshedPrice.returnNewPrice());
-        userItems[1].setPrice(refreshedPrice.returnNewPrice());
-        configureUI();  // essentially pushes the new item information to the panel
+        int index = jItemList.getSelectedIndex();
+        if(index > -1){
+            userItems[index].setPrice(refreshedPrice.returnNewPrice());
+
+            jItemList.setCellRenderer(itemRenderer);
+            try {
+                manager.updateItem("myFile.txt", userItems[index].itemURL, userItems[index].itemCurrentPrice, userItems[index].getChange());
+            }catch(Exception z){
+                z.printStackTrace();
+            }
+            jItemList.clearSelection();
+
+            showMessage("Item price updated! ");
+        }
+
+        jItemList.clearSelection();
 
         showMessage("Item price updated! ");
     }
@@ -97,38 +116,137 @@ public class Main extends JFrame {
      * the item. */
     private void viewPageClicked(ActionEvent event) {
 
-        Item tempItem = new Item();
-        String itemURL = tempItem.itemURL;
-        Desktop dk = Desktop.getDesktop();
-        try{
-            dk.browse(new java.net.URI(itemURL));
-        }catch(IOException | URISyntaxException e){
-            System.out.println("The URL on file is invalid.");
-        }
+        int index = jItemList.getSelectedIndex();
 
-        showMessage("Visiting Item Web Page");
+        if(index > -1) {
+            String itemURL = userItems[index].itemURL;
+            Desktop dk = Desktop.getDesktop();
+            try {
+                dk.browse(new java.net.URI(itemURL));
+            } catch (IOException | URISyntaxException e) {
+                System.out.println("The URL on file is invalid.");
+            }
+
+            showMessage("Visiting Item Web Page");
+            jItemList.clearSelection();
+        }
 
     }
 
     private void deleteItemClicked(ActionEvent e){
 
         int dialogButton = userInput.YES_NO_OPTION;
+        int selectedIndex = 0;
 
         int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete this item?","WARNING",dialogButton);
         if(dialogResult == JOptionPane.YES_OPTION){
-            int selectedIndex = jItemList.getSelectedIndex();
+            selectedIndex = jItemList.getSelectedIndex();
             if (selectedIndex != -1) {
+                try{
+                    manager.deleteItem("myFile.txt", userItems[selectedIndex].itemName, userItems[selectedIndex].itemURL);
+                }catch(Exception a){
+                    a.printStackTrace();
+                }
                 itemList.remove(selectedIndex);
             }
         }
+        jItemList.clearSelection();
+        currentCounter--;
     }
 
     private void addItemClicked(ActionEvent e){
 
+        JTextField name = new JTextField();
+        JTextField url = new JTextField();
+        JTextField price = new JTextField();
+
+        Object[] message = {
+
+                "Name: ", name,
+                "URL: ", url,
+                "Price: ", price,
+        };
+
+        JOptionPane.showConfirmDialog(getParent(), message, "Add Item", JOptionPane.OK_CANCEL_OPTION);
+
+
+       try{
+           userItems[currentCounter] = new Item(name.getText(), url.getText(), Float.parseFloat(price.getText()));
+           manager.adItem("myFile.txt", userItems[currentCounter]);
+           itemList.addElement(userItems[currentCounter]);
+           currentCounter++;
+
+       }catch(Exception error){
+           System.out.println("No item added. proceed.");
+       }
+
+        jItemList.setCellRenderer(itemRenderer);
+
+    }
+
+    private void editButtonClicked(ActionEvent event){
+
+        int index = jItemList.getSelectedIndex();
+
+        if(index > -1){
+            JTextField nameEdit = new JTextField(userItems[index].itemName);
+            JTextField urlEdit = new JTextField(userItems[index].itemURL);
+            JTextField priceEdit = new JTextField(Float.toString(userItems[index].itemCurrentPrice));
+
+
+            Object[] message = {
+
+                    "Name: ", nameEdit,
+                    "URL: ", urlEdit,
+                    "Price: ", priceEdit,
+            };
+
+
+            JOptionPane.showConfirmDialog(getParent(), message, "Add Item", JOptionPane.OK_CANCEL_OPTION);
+
+            try {
+                manager.changeItemName("myFile.txt", userItems[index].itemName, nameEdit.getText());
+                manager.changeItemURL("myFile.txt", userItems[index].itemURL, urlEdit.getText());
+            }catch(Exception h){
+                h.printStackTrace();
+            }
+
+            userItems[index].itemName = nameEdit.getText();
+            userItems[index].itemURL = urlEdit.getText();
+            userItems[index].itemCurrentPrice = Float.parseFloat(priceEdit.getText());
+            jItemList.setCellRenderer(itemRenderer);
+        }
+    }
+
+    private void updateAllClicked(ActionEvent event){
+
+        try{
+            for(int i = 0; i < userItems.length; i++){
+                if(userItems[i] != null){
+                    userItems[i].setPrice(refreshedPrice.returnNewPrice());
+                    manager.updateItem("myFile.txt", userItems[i].itemURL, userItems[i].itemCurrentPrice, userItems[i].getChange());
+                }
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        jItemList.setCellRenderer(itemRenderer);
+        showMessage("All Item prices have been updated!");
     }
 
     /** Configure UI. */
     private void configureUI() {
+
+        try{
+            fileToList = manager.arrayOfItems("myFile.txt");
+            for(int i = 0; i < fileToList.length; i++){
+                itemList.add(fileToList[i]);
+            }
+        }catch(Exception d){
+            d.printStackTrace();
+        }
+
 
         setLayout(new BorderLayout());
         final JPanel control = makeControlPanel();
@@ -147,10 +265,13 @@ public class Main extends JFrame {
                 BorderFactory.createEmptyBorder(10,16,0,16),
                 BorderFactory.createLineBorder(Color.CYAN)));
         board.setLayout(new GridLayout(1,1));
-
+        //jItemList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         JScrollPane pane = new JScrollPane(jItemList);
 
-        //pane.setViewportView(jItemList);
+
+        JScrollPane tempPane = new JScrollPane(jFileItemsList);
+
+        pane.setViewportView(jItemList);
         board.add(pane);
 
 
@@ -168,21 +289,26 @@ public class Main extends JFrame {
         refreshButton.addActionListener(this::refreshButtonClicked);
         refreshButton.setToolTipText("Refresh Item Price(s)");
         //checkButton.setPreferredSize(new Dimension(25,25));
-        JButton viewLink = new JButton(new ImageIcon(iconMaker("visitSite.png")));
+        final JButton viewLink = new JButton(new ImageIcon(iconMaker("visitSite.png")));
         viewLink.setToolTipText("Visit Item Website");
-        JButton deleteItem = new JButton(new ImageIcon(iconMaker("delete.png")));
+        final JButton deleteItem = new JButton(new ImageIcon(iconMaker("delete.png")));
         deleteItem.setToolTipText("Remove Item");
-        JButton addItem = buttonMaker("additem.png");
+        final JButton addItem = buttonMaker("additem.png");
         addItem.setToolTipText("Add Item to Price Watcher");
-        JButton editItem = buttonMaker("edititem.png");
+        final JButton editItem = buttonMaker("edititem.png");
         editItem.setToolTipText("Edit Item Details");
 
 
         viewLink.setFocusPainted(false);
         deleteItem.setFocusPainted(false);
+        addItem.setFocusPainted(false);
+        editItem.setFocusPainted(false);
 
         viewLink.addActionListener(this::viewPageClicked);
         deleteItem.addActionListener(this::deleteItemClicked);
+        addItem.addActionListener(this::addItemClicked);
+        editItem.addActionListener(this::editButtonClicked);
+
         panel.add(refreshButton);
         panel.add(viewLink);
         panel.add(deleteItem);
@@ -215,7 +341,7 @@ public class Main extends JFrame {
      * @param s Icon image file path
      * @return BufferedImage The new icon for the control panel button
      */
-    public static BufferedImage iconMaker(String s){
+    public BufferedImage iconMaker(String s){
         BufferedImage buttonIcon;
         try{
             buttonIcon = ImageIO.read(new File(FILE_PATH + s));
@@ -231,7 +357,7 @@ public class Main extends JFrame {
      * @param s The icon image name
      * @return JButton The new control panel button
      */
-    private static JButton buttonMaker(String s){
+    private JButton buttonMaker(String s){
         final JButton button;
         button = new JButton(new ImageIcon(iconMaker(s)));
         button.setFocusPainted(false);
@@ -247,19 +373,42 @@ public class Main extends JFrame {
         final JMenu menu = new JMenu("App");
         menuBar.add(menu);
         menu.addSeparator();
+
         final JMenuItem menuItem;
         (menuItem = new JMenuItem("Exit", 88)).addActionListener(p0 -> System.exit(0));
         menu.add(menuItem);
+
         final JMenu menu2;
         (menu2 = new JMenu("Item")).setMnemonic(73);
         menuBar.add(menu2);
         menu2.addSeparator();
-        final JButton menuDelete = new JButton("delete item");
+
+        final JMenuItem menuDelete = itemMaker("delete item");
         menu2.add(menuDelete);
         menuDelete.addActionListener(this::deleteItemClicked);
-        final JButton menuAdd = new JButton("add item");
+
+        final JMenuItem menuAdd = itemMaker("add item");
         menu2.add(menuAdd);
+        menuAdd.addActionListener(this::addItemClicked);
+
+        final JMenuItem menuEdit = itemMaker("edit item");
+        menu2.add(menuEdit);
+        menuEdit.addActionListener(this::editButtonClicked);
+
+        final JMenuItem menuVisit = itemMaker("visit item page");
+        menu2.add(menuVisit);
+        menuVisit.addActionListener(this::viewPageClicked);
+
+        final JMenuItem updateALL = itemMaker("update all");
+        menu2.add(updateALL);
+        updateALL.addActionListener(this::updateAllClicked);
 
         return menuBar;
+
+
+    }
+
+    private JMenuItem itemMaker(String s){
+        return new JMenuItem(s);
     }
 }

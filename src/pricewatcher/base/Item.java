@@ -1,19 +1,29 @@
-/**
- * CS 3331 -- Advanced Object Oriented Programming
- * HW 03
- * Main.java
- * By: Angel Villalpando / Edgar Escobedo / Jorge Quinonez
- * Instructor: Yoonsik Cheon
- * Last Modified: April 22, 2019
- */
-
 package pricewatcher.base;
 
+/*
+Created by Edgar Escobedo and Jorge Quinonez
+HW2 2-D Graphics
+Advanced Objects 3331
+Dr. Cheon
+03/06/2019
+ */
+
+import java.io.PrintStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+
 public class Item {
+    public String nameManage;
+    public String urlManage;
+    public String initialPriceManage;
+    public float initPriceManage;
+    public String currentPriceManage;
+    public float currPriceManage;
+    public String changeManage;
+    public String dateManage;
 
     protected  String itemName;
     protected  String itemURL;
@@ -25,8 +35,6 @@ public class Item {
     /**
      * Default constructor for the Item class
      */
-    public Item() {
-    }
 
     /**
      * Detail setting constructor. Sets the item details manually.
@@ -39,6 +47,7 @@ public class Item {
         itemName = name;
         itemURL = uRL;
         itemInitialPrice = price;
+        itemCurrentPrice = price;
     }
 
     /**
@@ -124,5 +133,70 @@ public class Item {
     public String itemToString() {
         String details = "Name:\t" + getName() + "\n" + "URL:\t" + getURL() + "\n" + "Initial Price:\t" + getInitialPrice() + "\n" + "Current Price:\t" + getCurrentPrice() + "\n" + "Date Added:\t" + "04/20/2019";
         return details;
+    }
+
+    public Item() {
+        this.nameManage = "Toshiba 43LF621U19 43-inch 4K Ultra HD Smart LED TV HDR - Fire TV Edition";
+        this.urlManage = "https://www.amazon.com/Toshiba-43LF621U19-43-inch-Ultra-Smart/dp/B07D4F2P26/ref=sr_1_2_sspa?s=tv&ie=UTF8&qid=1549072299&sr=1-2-spons&keywords=television&psc=1";
+        this.initialPriceManage = "200";
+        this.initPriceManage = 200;
+        this.currentPriceManage = "200";
+        this.currPriceManage = 200;
+        this.changeManage = "0";
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        this.dateManage = dateFormat.format(date);
+    }
+    public Item(String name, String url) {
+        this.nameManage =  name;
+        this.urlManage = url;
+        this.initialPriceManage = "200";
+        this.initPriceManage = 200;
+        this.currentPriceManage = "200";
+        this.currPriceManage = 200;
+        this.changeManage = "0";
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        this.dateManage = dateFormat.format(date);
+    }
+    public Item(String name, String url, String initialPrice, float initPrice, String currentPrice, float currPrice, String change) {
+        this.nameManage = name;
+        this.urlManage = url;
+        this.initialPriceManage = initialPrice;
+        this.initPriceManage = initPrice;
+        this.currentPriceManage = currentPrice;
+        this.currPriceManage = currPrice;
+        this.changeManage = change;
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        this.dateManage = dateFormat.format(date);
+    }
+    public Item(String name, String url, String initialPrice, float initPrice, String currentPrice, float currPrice, String change, String date) {
+        this.nameManage = name;
+        this.urlManage = url;
+        this.initialPriceManage = initialPrice;
+        this.initPriceManage = initPrice;
+        this.currentPriceManage = currentPrice;
+        this.currPriceManage = currPrice;
+        this.changeManage = change;
+        this.dateManage = date;
+    }
+
+
+    public void setCurrPrice() {
+
+        PriceFinder find = new PriceFinder();
+        float initialValue = 200;
+        float currentValue = find.returnNewPrice();
+        float difference = ((currentValue/initialValue) * 100)-100;
+        this.initialPriceManage = "200";
+        this.currPriceManage = currentValue;
+        String currPrice = Float.toString(currentValue);
+        this.currentPriceManage = currPrice;
+        String diff = Float.toString(difference);
+        this.changeManage = diff;
+    }
+    public void setName(String name) {
+
     }
 }
