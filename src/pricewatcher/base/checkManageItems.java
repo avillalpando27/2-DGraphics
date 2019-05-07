@@ -1,3 +1,12 @@
+/*
+ * CS 3331 -- Advanced Object Oriented Programming
+ * HW 04
+ * Main.java
+ * By: Angel Villalpando / Edgar Escobedo / Jorge Quinonez
+ * Instructor: Yoonsik Cheon
+ * Last Modified: May 6, 2019
+ */
+
 package pricewatcher.base;
 
 import java.io.BufferedReader;
@@ -14,10 +23,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import javax.swing.text.Document;
-
-//import json.JSONArray;
-//import json.JSONObject;
 
 public class checkManageItems {
     private int size;
@@ -27,12 +32,6 @@ public class checkManageItems {
         // TODO Auto-generated method stub
         return 0;
     }
-
-
-
-
-
-
 
     /**
      * @throws IOException ***********************************

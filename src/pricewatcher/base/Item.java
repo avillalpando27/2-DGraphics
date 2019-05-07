@@ -1,12 +1,14 @@
+/*
+ * CS 3331 -- Advanced Object Oriented Programming
+ * HW 04
+ * Main.java
+ * By: Angel Villalpando / Edgar Escobedo / Jorge Quinonez
+ * Instructor: Yoonsik Cheon
+ * Last Modified: May 6, 2019
+ */
+
 package pricewatcher.base;
 
-/*
-Created by Edgar Escobedo and Jorge Quinonez
-HW2 2-D Graphics
-Advanced Objects 3331
-Dr. Cheon
-03/06/2019
- */
 
 import java.io.PrintStream;
 import java.text.DateFormat;
