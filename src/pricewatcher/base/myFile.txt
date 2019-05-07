@@ -1,4 +1,3 @@
 iPhone XS, https://www.apple.com/iphone-xs/, 999, 999, 0, 05/04/2019
 iPhone XR, https://www.apple.com/iphone-xr/, 749, 749, 0, 05/04/2019
-new item,https://apple.com,65.65,856.48413,1204.6216,05/06/2019
-hesher,https://apple.clm,78.65,547.3419,595.921,05/06/2019
+iPhone mini,https://apple.com/ipad,749.0,749.0,-0.0,05/06/2019

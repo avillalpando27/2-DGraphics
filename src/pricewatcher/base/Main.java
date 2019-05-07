@@ -32,8 +32,6 @@ public class Main extends JFrame {
 
     private  Item[] userItems = new Item[100];
 
-    private Item[] fileToList;// sets temporary limit to 100 items
-
 
     private int currentCounter = 0;
     private JOptionPane userInput = new JOptionPane();
@@ -43,13 +41,8 @@ public class Main extends JFrame {
 
 
     private  DefaultListModel<Item> itemList = new DefaultListModel<>();
-   // private DefaultListModel<Item> fileItemsList = new DefaultListModel<>();
-
-    //private final JList<Item> jFileItemsList = new JList<>(fileItemsList);
     private final  JList<Item> jItemList = new JList<>(itemList);
-
     private ItemViewRenderer itemRenderer = new ItemViewRenderer();
-
 
     /**final file path for the images. */
     final private static String FILE_PATH = "/Users/angelvillalpando/Desktop/2-DGraphics/src/pricewatcher/base/image/";
@@ -237,16 +230,17 @@ public class Main extends JFrame {
 
     /** Configure UI. */
     private void configureUI() {
-
+        /*
         try{
-            fileToList = manager.arrayOfItems("myFile.txt");
-            for(int i = 0; i < fileToList.length; i++){
-                itemList.add(fileToList[i]);
+            Item[] fileItems = manager.arrayOfItems("myFile.txt");
+            System.out.println("size of tempitemps: " + fileItems.length);
+            for(int i = 0; i < fileItems.length; i++){
+                itemList.addElement(fileItems[i]);
             }
-        }catch(Exception d){
-            d.printStackTrace();
-        }
-
+            jItemList.setCellRenderer(itemRenderer);
+        }catch(Exception z){
+            z.printStackTrace();
+        }*/
 
         setLayout(new BorderLayout());
         final JPanel control = makeControlPanel();
@@ -265,11 +259,8 @@ public class Main extends JFrame {
                 BorderFactory.createEmptyBorder(10,16,0,16),
                 BorderFactory.createLineBorder(Color.CYAN)));
         board.setLayout(new GridLayout(1,1));
-        //jItemList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
         JScrollPane pane = new JScrollPane(jItemList);
-
-
-        JScrollPane tempPane = new JScrollPane(jFileItemsList);
 
         pane.setViewportView(jItemList);
         board.add(pane);
@@ -288,7 +279,7 @@ public class Main extends JFrame {
         refreshButton.setFocusPainted(false);
         refreshButton.addActionListener(this::refreshButtonClicked);
         refreshButton.setToolTipText("Refresh Item Price(s)");
-        //checkButton.setPreferredSize(new Dimension(25,25));
+
         final JButton viewLink = new JButton(new ImageIcon(iconMaker("visitSite.png")));
         viewLink.setToolTipText("Visit Item Website");
         final JButton deleteItem = new JButton(new ImageIcon(iconMaker("delete.png")));

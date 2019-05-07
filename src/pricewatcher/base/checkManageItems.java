@@ -232,7 +232,7 @@ public class checkManageItems {
     }
 
     public Item[] arrayOfItems(String fileName) throws FileNotFoundException {
-        Item[] items = new Item[1000];
+        Item[] items = new Item[2];
         File inputFile = new File ("/Users/angelvillalpando/Desktop/2-DGraphics/src/pricewatcher/base/" + fileName);
         Scanner sc = new Scanner (inputFile);
 
@@ -243,11 +243,11 @@ public class checkManageItems {
             String line	= sc.nextLine();
             String cut = "[,]";
             String[] cell = line.split(cut);
-            float initPrice = Float.parseFloat(cell[2]);
-            float currPrice = Float.parseFloat(cell[3]);
-            items[counter] = new Item(cell[0], cell[1], cell[2], initPrice,cell[3], currPrice, cell[4], cell[5]);
+
+            items[counter] = new Item(cell[0], cell[1], Float.parseFloat(cell[2]));
             counter++;
         }
+
         for(int i = 0; i < counter ; i++) {
             System.out.println(items[i].itemName+","+items[i].itemURL+","+items[i].itemInitialPrice+","+items[i].itemCurrentPrice+","+items[i].getChange()+","+items[i].returnDate());
         }

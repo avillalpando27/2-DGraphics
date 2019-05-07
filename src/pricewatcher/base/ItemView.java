@@ -22,7 +22,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.text.DecimalFormat;
-import javax.sound.sampled.*;
 
 
 
@@ -91,16 +90,12 @@ public class ItemView extends JPanel {
         if(tempChange < 0){
             g.setColor(Color.RED.brighter().brighter().brighter());
             g.drawString("Change:  % " + df.format(testItem.getChange()), 20, 100);
-
-            //playSound(); // method call to play audio clip
-           // np.play(np.getCodeBase(), "pricewatcher/base/sound/DeepPercussion.wav"); // previous attempt at audio
             g.setColor(Color.BLACK);
         }else{
             g.setColor(Color.GREEN);
             g.drawString("Change:  % " + df.format(testItem.getChange()), 20, 100);
             g.setColor(Color.BLACK);
         }
-        //g.drawString("Price Change: \t% " + df.format(testItem.getChange()), x, y);
         g.drawString("Date Added: " + testItem.returnDate() + " [ $" + df.format(testItem.itemInitialPrice) + " ]",  20, 120);
     }
 
@@ -123,28 +118,4 @@ public class ItemView extends JPanel {
         }
         return null;
     }
-
-    /**
-     * Plays sound when the price change is negative
-     */
-    public void playSound(){
-        try {
-            Clip audio;
-            (audio = AudioSystem.getClip()).open(AudioSystem.getAudioInputStream(getClass().getResource("/sound/DeepPercussion.wav")));
-            audio.start();
-        }
-        catch (IOException error0) {
-            final LineUnavailableException ex = new LineUnavailableException();
-            ex.printStackTrace();
-        }
-        catch (LineUnavailableException error2) {
-            System.out.println("This file is not available.");
-        }
-        catch (UnsupportedAudioFileException error1) {
-                System.out.println("This file type is not supported.");
-        }
-
-    }
 }
-
-//

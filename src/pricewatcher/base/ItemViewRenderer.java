@@ -26,7 +26,6 @@ public class ItemViewRenderer extends ItemView implements ListCellRenderer<Item>
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected,boolean cellHasFocus) {
 
-        //testItem = value;
         setItem(value);
 
         if(isSelected){
